@@ -1,10 +1,11 @@
 import requests
 import os
 import time
+from collections import defaultdict
 
 
 dhlauth_ids = [
-    432389,
+    # 432389,
     425704,
     436882,
     462923,
@@ -45,9 +46,13 @@ dhlauth_ids = [
 
 url = "https://digitallibrary.un.org"
 
+session_counts: defaultdict[int, int] = defaultdict(int)
+
 
 def fetch_meeting_records(dhlauth_id) -> list | None:
-    endpoint = f"{url}/search?of=recjson&fct__1=Meeting%20Records&fct__2=General%20Assembly&p=%28DHLAUTH%29{dhlauth_id}"
+    endpoint = (
+        f"{url}/search?f1=991&as=1&sf=title&so=a&rm=&m1=e&fct__1=Meeting%20Records&fct__2=General%20Assembly&p1=%28DHLAUTH%29{dhlauth_id}&ln=en&of=recjson"
+    )
 
     try:
         print("Fetching results for DHLAUTH ID:", dhlauth_id)
@@ -135,6 +140,7 @@ def download_pdf(url, save_folder="./data"):
                 for chunk in r.iter_content(chunk_size=8192): # 8 KB chunks
                     if chunk: # Filter out keep-alive new chunks
                         f.write(chunk)
+        session_counts[session_number] += 1
     except requests.exceptions.RequestException as e:
         print(f"Download failed: {e}")
 
@@ -143,6 +149,7 @@ def download_pdf(url, save_folder="./data"):
 if __name__ == "__main__":
     for dhlauth_id in dhlauth_ids:
         results = fetch_meeting_records(dhlauth_id)
+        time.sleep(2)  # brief pause before downloading
         if not results:
             print("No results found for DHLAUTH ID: ", dhlauth_id)
             continue
@@ -153,8 +160,15 @@ if __name__ == "__main__":
                 continue
             print("  Downloading PDF for Record ID: ", result.get("recid"))
             download_pdf(pdf_url)
-            time.sleep(10)  # brief pause between downloads
+            time.sleep(2)  # brief pause between downloads
         print("Completed DHLAUTH ID: ", dhlauth_id, "\n")
+
+    try:
+        with open("./session_counts.txt", "w", encoding="utf-8") as f:
+            for session_number, count in sorted(session_counts.items()):
+                f.write(f"{session_number}, {count}\n")
+    except IOError as e:
+        print(f"Failed to write session counts to file: {e}")
 
     # for record_id in record_ids:
     #     record_data = fetch_record_data(record_id)

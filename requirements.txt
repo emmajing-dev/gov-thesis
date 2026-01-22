@@ -1,3 +1,7 @@
 requests
 types-requests
 mypy
+pymupdf-layout
+pymupdf4llm
+tqdm
+types-tqdm

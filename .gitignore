@@ -1,2 +1,4 @@
 .mypy_cache
 .venv
+data**/
+session_counts.csv
