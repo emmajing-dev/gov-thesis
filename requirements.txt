@@ -5,3 +5,5 @@ pymupdf-layout
 pymupdf4llm
 tqdm
 types-tqdm
+pandas-stubs
+pandas
