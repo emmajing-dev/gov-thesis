@@ -16,8 +16,8 @@ atlasti_variables_csv = "./data/speech/atlasti_document_variables.csv"
 # SESSION TO YEAR MAPPING
 # =============================================================================
 # UN General Assembly sessions start in September of each year
-# Session 48 = 1993, Session 79 = 2024
-SESSION_YEAR_MAP = {f"session_{s}": 1945 + s for s in range(48, 80)}
+# Session 20 = 1965, Session 79 = 2024
+SESSION_YEAR_MAP = {f"session_{s}": 1945 + s for s in range(20, 80)}
 
 # =============================================================================
 # COUNTRY TO REGION MAPPING (UN Regional Groups)
@@ -780,19 +780,19 @@ def split_texts():
             f.write("No flagged lines - all potential speeches matched strict pattern.\n")
 
     # Print summary
-    print(f"\n✅ Extracted {len(all_speeches)} speeches from {len(all_meetings)} meetings across {df['session'].nunique()} sessions")
-    print(f"📊 Speech metadata saved to: {metadata_csv}")
-    print(f"📊 Meeting metadata saved to: {meeting_metadata_csv}")
-    print(f"📊 ATLAS.ti document variables saved to: {atlasti_variables_csv}")
-    print(f"📋 Extraction log written to: {log_file}")
+    print(f"\n Extracted {len(all_speeches)} speeches from {len(all_meetings)} meetings across {df['session'].nunique()} sessions")
+    print(f" Speech metadata saved to: {metadata_csv}")
+    print(f" Meeting metadata saved to: {meeting_metadata_csv}")
+    print(f" ATLAS.ti document variables saved to: {atlasti_variables_csv}")
+    print(f" Extraction log written to: {log_file}")
     if head_of_state_speeches:
-        print(f"   ℹ️  {len(head_of_state_speeches)} head-of-state/government speeches noted for review")
+        print(f"     {len(head_of_state_speeches)} head-of-state/government speeches noted for review")
     if skipped_files:
-        print(f"   ℹ️  {len(skipped_files)} files skipped (no general debate pattern)")
+        print(f"     {len(skipped_files)} files skipped (no general debate pattern)")
     if flagged_lines:
-        print(f"   ⚠️  {len(flagged_lines)} potential speeches flagged for manual review")
+        print(f"     {len(flagged_lines)} potential speeches flagged for manual review")
     else:
-        print("   ✓ No flagged lines - all potential speeches matched strict pattern")
+        print("    No flagged lines - all potential speeches matched strict pattern")
 
 
 if __name__ == "__main__":
